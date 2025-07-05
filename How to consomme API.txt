@@ -1,0 +1,26 @@
+Pour interroger l’API sans utiliser React, il suffit d’envoyer des requêtes HTTP depuis votre code JavaScript classique.
+
+D’après le README, l’API est accessible sur http://localhost:8000/api/ (variable VITE_API_URL) après avoir lancé le backend Django.
+
+Exemple basique de récupération des annonces :
+
+<script>
+  fetch('http://localhost:8000/api/annonces/')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(err => console.error('Erreur :', err));
+</script>
+Pour s’inscrire ou se connecter :
+
+POST http://localhost:8000/api/register/ – corps JSON {"email": "...", "password": "..."}
+
+POST http://localhost:8000/api/token/ – obtention du token JWT (avec les mêmes champs email et password)
+
+Une fois le token reçu, vous pouvez l’envoyer dans l’en-tête Authorization pour les requêtes protégées :
+
+fetch('http://localhost:8000/api/profile/', {
+  headers: { Authorization: 'Bearer VOTRE_ACCESS_TOKEN' }
+})
+  .then(r => r.json())
+  .then(profile => console.log(profile))
+Ainsi, avec de simples appels fetch, vous consommez toutes les routes documentées sur /swagger/ sans nécessiter React.
